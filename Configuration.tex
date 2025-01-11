@@ -1,0 +1,10 @@
+$ ssh-keygen -t rsa -b 4096
+$ ssh-copy-id username@server_ip
+
+% Install Docker
+$ for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
+$ sudo apt-get update
+$ sudo apt-get install ca-certificates curl
+$ sudo nano /etc/hosts
+    > 127.0.1.1    image-cdn
+$ sudo install -m 0755 -d /etc/apt/keyrings
