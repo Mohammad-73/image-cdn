@@ -1,3 +1,4 @@
+% set ssh key
 $ ssh-keygen -t rsa -b 4096
 $ ssh-copy-id username@server_ip
 
@@ -33,3 +34,36 @@ $ sudo usermod -g docker ${USER}
 % install docker compose
 $ sudo curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep -oP '"tag_name": "\K(.*)(?=")')/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 $ sudo chmod +x /usr/local/bin/docker-compose
+
+% 
+/opt$ sudo mkdir course-minio
+/opt/course-minio$ sudo nano docker-compose.yml
+
+> 
+version: '3.7'
+
+services:
+  minIO:
+    image: minio/minio:latest
+    container_name: course-minio
+    ports:
+      - "9005:9000"
+      - "9006:9001"
+    volumes:
+      - ./data:/data
+      - ./config:/root/.minio
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: classbon
+
+    command: server /data --console-address ":9001"
+    networks:
+      - course-minIO
+
+networks:
+  course-minIO:
+    driver: bridge
+
+$ sudo docker network create course-minIO
+$ docker network ls
+$ docker compose up -d
