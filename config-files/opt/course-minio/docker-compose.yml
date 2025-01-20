@@ -1,0 +1,41 @@
+version: "3.7"
+
+services:
+  minIO:
+    image: minio/minio:latest
+    container_name: course-minio
+    ports:
+      - "9005:9000"
+      - "9006:9001"
+    volumes:
+      - ./data:/data - ./config:/root/.minio
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: classbon
+
+    command: server /data --console-address ":9001"
+    networks:
+      - course-minIO
+
+  thumbor:
+    build: .
+    container_name: course-thumbor
+    ports:
+      - "8899:8899"
+    depends_on:
+      - minIO
+    volumes:
+      - ./thumbor.conf:/etc/thumbor.conf
+      - ./aws:/root/.aws
+    environment:
+      - AWS_ACCESS_KEY=admin
+      - AWS_SECRET_KEY=classbon
+      - TC_AWS_ENDPOINT=http://minIO:9000
+      - TC_AWS_REGION=classbon
+    command: thumbor --port 8899 -c /etc/thumbor.conf
+    networks:
+      - course-minIO
+
+networks:
+  course-minIO:
+    driver: bridge
