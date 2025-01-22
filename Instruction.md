@@ -6,11 +6,11 @@
 
 # Install Docker
 
-- `for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker  containerd runc; do sudo apt-get remove $pkg; done`
+- Check and remove: `for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker  containerd runc; do sudo apt-get remove $pkg; done`
 
-- `sudo apt-get update`
+- Update packages: `sudo apt-get update`
 
-- `sudo apt-get install ca-certificates curl`
+- Install install ca-certificates curl: `sudo apt-get install ca-certificates curl`
 
 - `sudo nano /etc/hosts > 127.0.1.1 image-cdn`
 
